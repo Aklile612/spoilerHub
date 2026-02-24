@@ -1,0 +1,22 @@
+.env
+.env.local
+node_modules/
+dist/
+.nuxt/
+.output/
+.env.prod
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Nuxt
+.nitro/
+.cache/

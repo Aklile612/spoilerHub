@@ -1,0 +1,22 @@
+{
+  "name": "spoilerhub",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "SpoilerHub - Movie Spoiler Web Application",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^3.8.0",
+    "vue": "^3.3.0",
+    "@nuxtjs/tailwindcss": "^6.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@nuxt/devtools": "latest"
+  }
+}
