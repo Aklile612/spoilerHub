@@ -1,0 +1,76 @@
+/* Tailwind base layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Page transitions ── */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ── Spoiler expand / collapse ── */
+.spoiler-enter-active {
+  transition: max-height 0.5s ease, opacity 0.4s ease;
+  overflow: hidden;
+}
+.spoiler-leave-active {
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  overflow: hidden;
+}
+.spoiler-enter-from,
+.spoiler-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.spoiler-enter-to,
+.spoiler-leave-from {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+/* ── Markdown rendered spoiler content ── */
+.spoiler-content h2 {
+  @apply text-xl font-bold mt-6 mb-2 text-gray-900;
+}
+.spoiler-content h3 {
+  @apply text-lg font-semibold mt-4 mb-1 text-gray-800;
+}
+.spoiler-content p {
+  @apply mb-3 leading-relaxed text-gray-700;
+}
+.spoiler-content strong {
+  @apply font-semibold text-gray-900;
+}
+.spoiler-content ul {
+  @apply list-disc pl-5 mb-3;
+}
+.spoiler-content li {
+  @apply mb-1 text-gray-700;
+}
+.spoiler-content em {
+  @apply italic;
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+}
