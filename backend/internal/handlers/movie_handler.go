@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -112,6 +113,108 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 
 	// Return successful response
 	c.JSON(http.StatusOK, response)
+}
+
+// DiscoverMovies handles GET /api/movies?years=2025,2026 — returns top-rated movies across years
+// Also supports single year: GET /api/movies?year=2025
+func (h *MovieHandler) DiscoverMovies(c *gin.Context) {
+	years := c.DefaultQuery("years", "")
+	year := c.DefaultQuery("year", "")
+
+	var tmdbMovies []models.TMDBMovie
+	var err error
+	var label string
+
+	if years != "" {
+		// Multiple years: split by comma, use first as start and last as end
+		parts := strings.Split(years, ",")
+		startYear := strings.TrimSpace(parts[0])
+		endYear := strings.TrimSpace(parts[len(parts)-1])
+		tmdbMovies, err = h.tmdbService.DiscoverMoviesByDateRange(startYear, endYear)
+		label = startYear + "-" + endYear
+	} else {
+		if year == "" {
+			year = "2025"
+		}
+		tmdbMovies, err = h.tmdbService.DiscoverMoviesByYear(year)
+		label = year
+	}
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Error: fmt.Sprintf("failed to discover movies: %v", err),
+		})
+		return
+	}
+
+	genreMap, err := h.tmdbService.GetGenres()
+	if err != nil {
+		log.Printf("Failed to fetch genres: %v", err)
+		genreMap = make(map[int]string)
+	}
+
+	var movies []models.MovieResponse
+	for _, m := range tmdbMovies {
+		movies = append(movies, models.MovieResponse{
+			Title:    m.Title,
+			Year:     h.tmdbService.ExtractYear(m.ReleaseDate),
+			Poster:   h.tmdbService.FormatPosterURL(m.PosterPath),
+			Backdrop: h.tmdbService.FormatBackdropURL(m.BackdropPath),
+			Rating:   m.VoteAverage,
+			Genres:   h.tmdbService.ExtractGenreNames(m.GenreIDs, genreMap),
+			Overview: h.tmdbService.TruncateOverview(m.Overview, 500),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"movies": movies,
+		"count":  len(movies),
+		"year":   label,
+	})
+}
+
+// SearchMovies handles GET /api/search?q=term — returns search results without spoilers
+func (h *MovieHandler) SearchMovies(c *gin.Context) {
+	query := c.Query("q")
+	if query == "" {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Error: "q query parameter is required",
+		})
+		return
+	}
+
+	tmdbMovies, err := h.tmdbService.SearchMovies(query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Error: fmt.Sprintf("failed to search movies: %v", err),
+		})
+		return
+	}
+
+	genreMap, err := h.tmdbService.GetGenres()
+	if err != nil {
+		log.Printf("Failed to fetch genres: %v", err)
+		genreMap = make(map[int]string)
+	}
+
+	var movies []models.MovieResponse
+	for _, m := range tmdbMovies {
+		movies = append(movies, models.MovieResponse{
+			Title:    m.Title,
+			Year:     h.tmdbService.ExtractYear(m.ReleaseDate),
+			Poster:   h.tmdbService.FormatPosterURL(m.PosterPath),
+			Backdrop: h.tmdbService.FormatBackdropURL(m.BackdropPath),
+			Rating:   m.VoteAverage,
+			Genres:   h.tmdbService.ExtractGenreNames(m.GenreIDs, genreMap),
+			Overview: h.tmdbService.TruncateOverview(m.Overview, 500),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"movies": movies,
+		"count":  len(movies),
+		"query":  query,
+	})
 }
 
 // GetTrendingMovies returns the most searched movies from the database
