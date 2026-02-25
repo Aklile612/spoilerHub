@@ -174,44 +174,48 @@ func (s *TMDBService) DiscoverMoviesByYear(year string) ([]models.TMDBMovie, err
 	return searchResult.Results, nil
 }
 
-// DiscoverMoviesByDateRange fetches top-rated movies between two years from TMDB
-func (s *TMDBService) DiscoverMoviesByDateRange(startYear, endYear string) ([]models.TMDBMovie, error) {
-	var allMovies []models.TMDBMovie
+// TMDBDiscoverResult extends the search result with pagination info
+type TMDBDiscoverResult struct {
+	Results    []models.TMDBMovie `json:"results"`
+	Page       int                `json:"page"`
+	TotalPages int                `json:"total_pages"`
+}
 
-	// Fetch 2 pages for more results across the date range
-	for page := 1; page <= 2; page++ {
-		discoverURL := fmt.Sprintf(
-			"https://api.themoviedb.org/3/discover/movie?api_key=%s&primary_release_date.gte=%s-01-01&primary_release_date.lte=%s-12-31&sort_by=vote_average.desc&vote_count.gte=50&page=%d",
-			s.apiKey,
-			url.QueryEscape(startYear),
-			url.QueryEscape(endYear),
-			page,
-		)
-
-		resp, err := s.client.Get(discoverURL)
-		if err != nil {
-			return nil, fmt.Errorf("failed to discover movies: %w", err)
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusOK {
-			return nil, fmt.Errorf("TMDB discover API error: status code %d", resp.StatusCode)
-		}
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read discover response: %w", err)
-		}
-
-		var searchResult models.TMDBSearchResult
-		if err := json.Unmarshal(body, &searchResult); err != nil {
-			return nil, fmt.Errorf("failed to parse discover response: %w", err)
-		}
-
-		allMovies = append(allMovies, searchResult.Results...)
+// DiscoverMoviesByDateRange fetches top-rated movies between two years from TMDB (single page)
+func (s *TMDBService) DiscoverMoviesByDateRange(startYear, endYear string, page int) ([]models.TMDBMovie, int, error) {
+	if page < 1 {
+		page = 1
 	}
 
-	return allMovies, nil
+	discoverURL := fmt.Sprintf(
+		"https://api.themoviedb.org/3/discover/movie?api_key=%s&primary_release_date.gte=%s-01-01&primary_release_date.lte=%s-12-31&sort_by=vote_average.desc&vote_count.gte=50&page=%d",
+		s.apiKey,
+		url.QueryEscape(startYear),
+		url.QueryEscape(endYear),
+		page,
+	)
+
+	resp, err := s.client.Get(discoverURL)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to discover movies: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, 0, fmt.Errorf("TMDB discover API error: status code %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, 0, fmt.Errorf("failed to read discover response: %w", err)
+	}
+
+	var result TMDBDiscoverResult
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, 0, fmt.Errorf("failed to parse discover response: %w", err)
+	}
+
+	return result.Results, result.TotalPages, nil
 }
 
 // FormatPosterURL formats the poster URL
