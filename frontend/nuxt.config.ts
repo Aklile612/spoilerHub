@@ -1,6 +1,6 @@
-// https://nuxt.com/docs/guide/concepts/rendering#hybrid-rendering
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // Enable SSR
+  // Enable SSR for fast initial load
   ssr: true,
 
   // Modules
@@ -12,42 +12,43 @@ export default defineNuxtConfig({
     configPath: "tailwind.config.ts",
   },
 
-  // Runtime configuration
+  // Runtime configuration — backend API base URL
   runtimeConfig: {
     public: {
       apiBaseUrl: "http://localhost:8080",
     },
   },
 
-  // App configuration
+  // App head configuration
   app: {
     head: {
-      title: "SpoilerHub - Movie Spoiler Explanations",
+      title: "SpoilerHub — Movie Spoilers & Explanations",
+      htmlAttrs: { lang: "en" },
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           name: "description",
-          content: "Discover detailed spoiler explanations for your favorite movies powered by AI",
+          content:
+            "Discover detailed AI-generated spoiler explanations for your favorite movies",
         },
-        {
-          name: "theme-color",
-          content: "#111827",
-        },
-        {
-          name: "og:title",
-          content: "SpoilerHub - Movie Spoiler Explanations",
-        },
-        {
-          name: "og:description",
-          content: "Discover detailed spoiler explanations for your favorite movies powered by AI",
-        },
-        {
-          name: "og:type",
-          content: "website",
-        },
+        { name: "theme-color", content: "#ffffff" },
       ],
       link: [
+        // Google Fonts — Inter for clean professional typography
+        {
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap",
+        },
         {
           rel: "icon",
           type: "image/svg+xml",
@@ -55,38 +56,33 @@ export default defineNuxtConfig({
         },
       ],
     },
+    // Page transition animation
+    pageTransition: { name: "page", mode: "out-in" },
   },
 
   // Global CSS
-  css: ["~/assets/css/global.css"],
+  css: ["~/assets/css/main.css"],
 
-  // Nitro (server-side) configuration
+  // Nitro config
   nitro: {
     prerender: {
       crawlLinks: false,
     },
   },
 
-  // Build configuration
-  build: {
-    transpile: [],
-  },
-
-  // Development server configuration
+  // Dev server
   devServer: {
     port: 3000,
   },
 
-  // Component auto-import configuration
+  // Auto-import components
   components: true,
 
-  // Composable auto-import configuration
-  imports: {
-    autoImport: true,
-  },
-
-  // TypeScript configuration
+  // TypeScript strict mode
   typescript: {
     strict: true,
   },
+
+  // Compatibility date
+  compatibilityDate: "2024-11-01",
 });
