@@ -116,7 +116,7 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// DiscoverMovies handles GET /api/movies?years=2025,2026&page=1 — returns top-rated movies with pagination
+// DiscoverMovies handles GET /api/movies?years=2025,2026&page=1 — returns trending movies with pagination
 // Also supports single year: GET /api/movies?year=2025&page=1
 func (h *MovieHandler) DiscoverMovies(c *gin.Context) {
 	years := c.DefaultQuery("years", "")
