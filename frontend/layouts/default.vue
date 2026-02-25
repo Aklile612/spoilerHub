@@ -1,64 +1,31 @@
-<template>
-  <div
-    class="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900"
-  >
-    <!-- Header -->
-    <header class="border-b border-dark-700 bg-dark-800 bg-opacity-50 backdrop-blur">
-      <div class="max-w-6xl mx-auto px-4 py-6">
-        <NuxtLink to="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-lg">🍿</span>
-          </div>
-          <h1 class="text-2xl font-bold text-white">SpoilerHub</h1>
-        </NuxtLink>
-      </div>
-    </header>
+<script setup lang="ts">
+/**
+ * Default layout — AppHeader + main content + footer.
+ * White background, centered max-width container.
+ */
+</script>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 py-12">
+<template>
+  <div class="flex min-h-screen flex-col bg-white font-sans text-gray-900">
+    <!-- Global header -->
+    <AppHeader />
+
+    <!-- Page content -->
+    <main class="flex-1">
       <slot />
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-dark-700 bg-dark-800 bg-opacity-50 backdrop-blur mt-16">
-      <div class="max-w-6xl mx-auto px-4 py-8">
-        <div class="text-center text-gray-400 text-sm space-y-2">
-          <p>© 2024 SpoilerHub. All rights reserved.</p>
-          <p>
-            Powered by
-            <a
-              href="https://www.themoviedb.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-400 hover:text-blue-300"
-            >
-              TMDB
-            </a>
-            and
-            <a
-              href="https://ai.google.dev/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-blue-400 hover:text-blue-300"
-            >
-              Google Gemini AI
-            </a>
-          </p>
-        </div>
+    <footer class="border-t border-gray-100 bg-gray-50 py-6">
+      <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <p class="text-sm text-gray-400">
+          © {{ new Date().getFullYear() }} SpoilerHub — Built with Nuxt 3 &amp;
+          Go
+        </p>
+        <p class="mt-1 text-xs text-gray-300">
+          Movie data from TMDB · Spoilers by Gemini AI
+        </p>
       </div>
     </footer>
   </div>
 </template>
-
-<style scoped>
-/* Layout transitions */
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-}
-</style>
