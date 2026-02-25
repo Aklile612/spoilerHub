@@ -181,14 +181,14 @@ type TMDBDiscoverResult struct {
 	TotalPages int                `json:"total_pages"`
 }
 
-// DiscoverMoviesByDateRange fetches top-rated movies between two years from TMDB (single page)
+// DiscoverMoviesByDateRange fetches trending (most popular) movies between two years from TMDB (single page)
 func (s *TMDBService) DiscoverMoviesByDateRange(startYear, endYear string, page int) ([]models.TMDBMovie, int, error) {
 	if page < 1 {
 		page = 1
 	}
 
 	discoverURL := fmt.Sprintf(
-		"https://api.themoviedb.org/3/discover/movie?api_key=%s&primary_release_date.gte=%s-01-01&primary_release_date.lte=%s-12-31&sort_by=vote_average.desc&vote_count.gte=50&page=%d",
+		"https://api.themoviedb.org/3/discover/movie?api_key=%s&primary_release_date.gte=%s-01-01&primary_release_date.lte=%s-12-31&sort_by=popularity.desc&page=%d",
 		s.apiKey,
 		url.QueryEscape(startYear),
 		url.QueryEscape(endYear),
