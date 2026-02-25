@@ -124,17 +124,13 @@ Instructions:
 3. Provide:
    - Full plot breakdown
    - Major twists
-   - Character arcs
    - Ending explanation
-   - Hidden clues
    - If ambiguous ending, include interpretations
 4. Keep explanation between 600-1000 words.
 5. Structure output with markdown headings:
    - Movie Overview
    - Full Spoiler Breakdown
    - Ending Explained
-   - Themes & Meaning
-
 Do not fabricate unknown facts.`, title, year)
 
 	return prompt
