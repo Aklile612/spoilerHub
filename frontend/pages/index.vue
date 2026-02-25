@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * Home page — discovers top-rated movies for 2025 & 2026.
+ * Home page — discovers trending movies for 2025 & 2026.
  * Infinite scroll: loads more movies as user scrolls down.
  */
 import type { TrendingResponse } from "~/types/movie";
 
-// Fetch top-rated movies with pagination
+// Fetch trending movies with pagination
 const { movies, loading, loadingMore, error, hasMore, loadMore } =
   useMovies("2025,2026");
 
@@ -23,22 +23,36 @@ const trendingMovies = computed(() => trendingData.value?.movies ?? []);
 
 // Infinite scroll: observe a sentinel element at the bottom of the grid
 const scrollSentinel = ref<HTMLElement | null>(null);
+let observer: IntersectionObserver | null = null;
 
-onMounted(() => {
-  if (!scrollSentinel.value) return;
+// Watch the sentinel ref — it only appears in the DOM after loading=false,
+// so we can't rely on onMounted (sentinel is inside a v-if).
+watch(scrollSentinel, (el) => {
+  // Clean up previous observer if any
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
 
-  const observer = new IntersectionObserver(
+  if (!el) return;
+
+  observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting && hasMore.value && !loadingMore.value) {
         loadMore();
       }
     },
-    { rootMargin: "200px" }
+    { rootMargin: "400px" }
   );
 
-  observer.observe(scrollSentinel.value);
+  observer.observe(el);
+});
 
-  onUnmounted(() => observer.disconnect());
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
 });
 
 useHead({
@@ -48,24 +62,8 @@ useHead({
 
 <template>
   <div>
-    <!-- Hero section -->
-    <section class="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
-      <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-        <h1
-          class="animate-fade-in text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl"
-        >
-          🍿 Discover Movie
-          <span class="text-brand">Spoilers</span>
-        </h1>
-        <p
-          class="animate-fade-in mx-auto mt-4 max-w-2xl text-base text-gray-500 sm:text-lg"
-          style="animation-delay: 100ms"
-        >
-          Search any movie and get AI-generated plot breakdowns, ending
-          explanations, and thematic analysis.
-        </p>
-      </div>
-    </section>
+    <!-- Hero carousel — 4 featured films -->
+    <HeroCarousel />
 
     <!-- Trending movies section (from Supabase cache) -->
     <section
@@ -95,8 +93,8 @@ useHead({
     <!-- 2026 Movies section -->
     <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div class="mb-6 flex items-center gap-2">
-        <span class="text-xl">🎬</span>
-        <h2 class="text-xl font-bold text-gray-900">Top Rated — 2025 & 2026</h2>
+        <span class="text-xl">🔥</span>
+        <h2 class="text-xl font-bold text-gray-900">Trending — 2025 & 2026</h2>
       </div>
 
       <!-- Error state -->
@@ -144,7 +142,7 @@ useHead({
           v-else-if="!hasMore && movies.length > 0"
           class="text-sm text-gray-300"
         >
-          You've seen all the top-rated movies 🎬
+          You've reached the end of trending movies 🎬
         </p>
 
         <!-- Invisible sentinel that triggers loading the next page -->
