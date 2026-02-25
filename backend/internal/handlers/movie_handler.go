@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -115,28 +116,34 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// DiscoverMovies handles GET /api/movies?years=2025,2026 — returns top-rated movies across years
-// Also supports single year: GET /api/movies?year=2025
+// DiscoverMovies handles GET /api/movies?years=2025,2026&page=1 — returns top-rated movies with pagination
+// Also supports single year: GET /api/movies?year=2025&page=1
 func (h *MovieHandler) DiscoverMovies(c *gin.Context) {
 	years := c.DefaultQuery("years", "")
 	year := c.DefaultQuery("year", "")
+	pageStr := c.DefaultQuery("page", "1")
+	page := 1
+	if p, err := strconv.Atoi(pageStr); err == nil && p > 0 {
+		page = p
+	}
 
 	var tmdbMovies []models.TMDBMovie
+	var totalPages int
 	var err error
 	var label string
 
 	if years != "" {
-		// Multiple years: split by comma, use first as start and last as end
 		parts := strings.Split(years, ",")
 		startYear := strings.TrimSpace(parts[0])
 		endYear := strings.TrimSpace(parts[len(parts)-1])
-		tmdbMovies, err = h.tmdbService.DiscoverMoviesByDateRange(startYear, endYear)
+		tmdbMovies, totalPages, err = h.tmdbService.DiscoverMoviesByDateRange(startYear, endYear, page)
 		label = startYear + "-" + endYear
 	} else {
 		if year == "" {
 			year = "2025"
 		}
 		tmdbMovies, err = h.tmdbService.DiscoverMoviesByYear(year)
+		totalPages = 1
 		label = year
 	}
 
@@ -167,9 +174,11 @@ func (h *MovieHandler) DiscoverMovies(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"movies": movies,
-		"count":  len(movies),
-		"year":   label,
+		"movies":      movies,
+		"count":       len(movies),
+		"year":        label,
+		"page":        page,
+		"total_pages": totalPages,
 	})
 }
 
