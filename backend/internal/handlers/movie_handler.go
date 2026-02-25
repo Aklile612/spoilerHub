@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,15 +13,17 @@ import (
 
 // MovieHandler handles movie-related API requests
 type MovieHandler struct {
-	tmdbService   *services.TMDBService
-	geminiService *services.GeminiService
+	tmdbService     *services.TMDBService
+	geminiService   *services.GeminiService
+	supabaseService *services.SupabaseService
 }
 
 // NewMovieHandler creates a new movie handler
-func NewMovieHandler(tmdbService *services.TMDBService, geminiService *services.GeminiService) *MovieHandler {
+func NewMovieHandler(tmdbService *services.TMDBService, geminiService *services.GeminiService, supabaseService *services.SupabaseService) *MovieHandler {
 	return &MovieHandler{
-		tmdbService:   tmdbService,
-		geminiService: geminiService,
+		tmdbService:     tmdbService,
+		geminiService:   geminiService,
+		supabaseService: supabaseService,
 	}
 }
 
@@ -44,7 +47,7 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 		return
 	}
 
-	// Search for movie on TMDB
+	// Search for movie on TMDB first to get the canonical title and year
 	tmdbMovie, err := h.tmdbService.SearchMovie(title)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -52,6 +55,23 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 		})
 		return
 	}
+
+	// Extract year from release date
+	year := h.tmdbService.ExtractYear(tmdbMovie.ReleaseDate)
+
+	// Step 1: Check Supabase database for cached result
+	if h.supabaseService != nil {
+		cachedMovie, err := h.supabaseService.FindMovieByTitleAndYear(tmdbMovie.Title, year)
+		if err != nil {
+			log.Printf("Supabase lookup warning: %v", err)
+		} else if cachedMovie != nil {
+			log.Printf("Cache HIT: serving '%s (%s)' from Supabase", cachedMovie.Title, cachedMovie.Year)
+			c.JSON(http.StatusOK, cachedMovie)
+			return
+		}
+	}
+
+	log.Printf("Cache MISS: generating spoiler for '%s (%s)' via Gemini", tmdbMovie.Title, year)
 
 	// Get genres mapping
 	genreMap, err := h.tmdbService.GetGenres()
@@ -62,13 +82,10 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 		return
 	}
 
-	// Extract year from release date
-	year := h.tmdbService.ExtractYear(tmdbMovie.ReleaseDate)
-
 	// Extract genre names
 	genres := h.tmdbService.ExtractGenreNames(tmdbMovie.GenreIDs, genreMap)
 
-	// Generate spoiler explanation using Gemini
+	// Step 2: Generate spoiler explanation using Gemini (only on cache miss)
 	spoiler, err := h.geminiService.GenerateSpoiler(tmdbMovie.Title, year)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
@@ -89,14 +106,49 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 		Spoiler:  spoiler,
 	}
 
+	// Step 3: Save to Supabase in the background
+	if h.supabaseService != nil {
+		go func() {
+			if err := h.supabaseService.SaveMovie(&response); err != nil {
+				log.Printf("Failed to save movie to Supabase: %v", err)
+			} else {
+				log.Printf("Saved '%s (%s)' to Supabase", response.Title, response.Year)
+			}
+		}()
+	}
+
 	// Return successful response
 	c.JSON(http.StatusOK, response)
+}
+
+// GetTrendingMovies returns the most searched movies from the database
+func (h *MovieHandler) GetTrendingMovies(c *gin.Context) {
+	if h.supabaseService == nil {
+		c.JSON(http.StatusServiceUnavailable, models.ErrorResponse{
+			Error: "database not configured",
+		})
+		return
+	}
+
+	movies, err := h.supabaseService.GetAllMovies()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Error: fmt.Sprintf("failed to fetch trending movies: %v", err),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"movies": movies,
+		"count":  len(movies),
+	})
 }
 
 // HealthCheck handles the health check endpoint
 func (h *MovieHandler) HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"status": "healthy",
+		"status":     "healthy",
 		"cache_size": h.geminiService.GetCacheSize(),
+		"database":   h.supabaseService != nil,
 	})
 }
