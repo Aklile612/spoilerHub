@@ -16,5 +16,8 @@ func SetupRoutes(router *gin.Engine, movieHandler *handlers.MovieHandler) {
 	{
 		// Movie endpoint
 		api.GET("/movie", movieHandler.GetMovie)
+
+		// Trending/cached movies endpoint
+		api.GET("/trending", movieHandler.GetTrendingMovies)
 	}
 }
