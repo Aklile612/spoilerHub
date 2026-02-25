@@ -7,7 +7,7 @@
 
 <template>
   <header
-    class="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm"
+    class="sticky top-0 z-50 bg-black/20 backdrop-blur-md"
   >
     <div
       class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
@@ -19,7 +19,7 @@
         aria-label="SpoilerHub Home"
       >
         <span class="text-2xl" aria-hidden="true">🍿</span>
-        <span class="text-xl font-extrabold tracking-tight text-gray-900">
+        <span class="text-xl font-extrabold tracking-tight text-white">
           Spoiler<span class="text-brand">Hub</span>
         </span>
       </NuxtLink>
