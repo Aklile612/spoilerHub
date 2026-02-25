@@ -41,8 +41,17 @@ func main() {
 	tmdbService := services.NewTMDBService(cfg.TMDBAPIKey)
 	geminiService := services.NewGeminiService(cfg.GeminiAPIKey)
 
+	// Initialize Supabase service (optional — app works without it)
+	var supabaseService *services.SupabaseService
+	if cfg.SupabaseURL != "" && cfg.SupabaseKey != "" {
+		supabaseService = services.NewSupabaseService(cfg.SupabaseURL, cfg.SupabaseKey)
+		log.Println("Supabase database caching enabled")
+	} else {
+		log.Println("Warning: SUPABASE_URL/SUPABASE_KEY not set — running without database caching")
+	}
+
 	// Initialize handlers
-	movieHandler := handlers.NewMovieHandler(tmdbService, geminiService)
+	movieHandler := handlers.NewMovieHandler(tmdbService, geminiService, supabaseService)
 
 	// Setup routes
 	routes.SetupRoutes(router, movieHandler)
