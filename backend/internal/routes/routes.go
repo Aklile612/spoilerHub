@@ -14,8 +14,14 @@ func SetupRoutes(router *gin.Engine, movieHandler *handlers.MovieHandler) {
 	// API routes
 	api := router.Group("/api")
 	{
-		// Movie endpoint
+		// Single movie with spoiler
 		api.GET("/movie", movieHandler.GetMovie)
+
+		// Discover movies by year
+		api.GET("/movies", movieHandler.DiscoverMovies)
+
+		// Search movies (no spoiler generation)
+		api.GET("/search", movieHandler.SearchMovies)
 
 		// Trending/cached movies endpoint
 		api.GET("/trending", movieHandler.GetTrendingMovies)
