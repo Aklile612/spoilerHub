@@ -79,7 +79,7 @@ useHead({
           {{ trendingMovies.length }}
         </span>
       </div>
-      <MovieGrid :movies="trendingMovies" :loading="trendingLoading" />
+      <MovieGrid :movies="trendingMovies" :loading="trendingLoading" horizontal />
     </section>
 
     <!-- Divider (only show if both sections have content) -->
