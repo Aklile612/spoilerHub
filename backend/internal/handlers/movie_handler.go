@@ -27,14 +27,7 @@ func NewMovieHandler(tmdbService *services.TMDBService, geminiService *services.
 	}
 }
 
-// GetMovie handles the GET /api/movie endpoint
-// @Summary Get movie details with spoiler explanation
-// @Description Searches for a movie and generates AI spoiler explanation
-// @Param title query string true "Movie title to search for"
-// @Produce json
-// @Success 200 {object} models.MovieResponse
-// @Failure 400 {object} models.ErrorResponse
-// @Failure 500 {object} models.ErrorResponse
+
 func (h *MovieHandler) GetMovie(c *gin.Context) {
 	// Get title from query parameters
 	title := c.Query("title")
