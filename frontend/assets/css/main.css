@@ -46,6 +46,114 @@
   opacity: 1;
 }
 
+/* ── Spoiler reveal — cinematic red glow ── */
+.spoiler-reveal-enter-active {
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s ease;
+}
+.spoiler-reveal-leave-active {
+  transition: opacity 0.4s ease, transform 0.4s ease, filter 0.3s ease;
+}
+.spoiler-reveal-enter-from {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  filter: blur(8px);
+}
+.spoiler-reveal-leave-to {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
+  filter: blur(4px);
+}
+
+/* ── Accordion expand / collapse ── */
+.accordion-enter-active {
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  overflow: hidden;
+}
+.accordion-leave-active {
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+.accordion-enter-from,
+.accordion-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.accordion-enter-to,
+.accordion-leave-from {
+  max-height: 1200px;
+  opacity: 1;
+}
+
+/* ── Stagger fade-in for sections ── */
+.stagger-enter-active {
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stagger-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* ── Red glow pulse for spoiler warning ── */
+@keyframes redGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(198, 40, 40, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(198, 40, 40, 0.3), 0 0 60px rgba(198, 40, 40, 0.1);
+  }
+}
+.red-glow-pulse {
+  animation: redGlow 3s ease-in-out infinite;
+}
+
+/* ── Status badge pulse ── */
+@keyframes statusPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.status-pulse:hover {
+  animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Gold glow for rating ── */
+@keyframes goldGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(245, 197, 24, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(245, 197, 24, 0.5);
+  }
+}
+.gold-glow {
+  animation: goldGlow 2s ease-in-out infinite;
+}
+
+/* ── Timeline vertical line ── */
+.timeline-line {
+  position: relative;
+}
+.timeline-line::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #F5C518, #E0B400, transparent);
+  border-radius: 1px;
+}
+
+/* ── Progress bar animation ── */
+@keyframes progressFill {
+  from { width: 0%; }
+  to { width: var(--progress-width); }
+}
+.progress-bar-animated {
+  animation: progressFill 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ── Markdown rendered spoiler content ── */
 .spoiler-content h2 {
   @apply text-xl font-bold mt-6 mb-2 text-gray-900;
@@ -69,6 +177,29 @@
   @apply italic;
 }
 
+/* ── Detail page spoiler markdown ── */
+.detail-spoiler-content h2 {
+  @apply text-lg font-bold mt-5 mb-2 text-gray-900;
+}
+.detail-spoiler-content h3 {
+  @apply text-base font-semibold mt-3 mb-1.5 text-gray-800;
+}
+.detail-spoiler-content p {
+  @apply mb-3 leading-relaxed text-gray-600;
+}
+.detail-spoiler-content strong {
+  @apply font-semibold text-gray-900;
+}
+.detail-spoiler-content ul {
+  @apply list-disc pl-5 mb-3 space-y-1;
+}
+.detail-spoiler-content li {
+  @apply text-gray-600;
+}
+.detail-spoiler-content em {
+  @apply italic text-gray-500;
+}
+
 /* ── Skeleton shimmer ── */
 @keyframes shimmer {
   0% {
@@ -80,6 +211,11 @@
 }
 .skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+}
+.skeleton-dark {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
   background-size: 800px 100%;
   animation: shimmer 1.5s infinite;
 }
