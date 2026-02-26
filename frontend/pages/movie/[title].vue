@@ -236,7 +236,7 @@ function interpretationIcon(title: string) {
               Back to Home
             </NuxtLink>
 
-            <div class="flex items-center gap-2">
+            <!-- <div class="flex items-center gap-2">
               <button
                 @click="toggleBookmark"
                 class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 backdrop-blur-md transition-all hover:bg-white/25"
@@ -258,7 +258,7 @@ function interpretationIcon(title: string) {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                 </svg>
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
 
