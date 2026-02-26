@@ -89,7 +89,7 @@ const filteredMovies = computed(() => {
               Curated for you
             </p>
             <h2 class="mt-1 flex items-center gap-2 text-2xl font-black tracking-tight text-gray-900">
-              Currently Dominating Screens
+              Currently Dominating Searches
               <span class="inline-block h-1.5 w-8 rounded-full bg-brand" />
             </h2>
           </div>
