@@ -35,4 +35,3 @@ Thumbs.db
 
 # Go modules
 vendor/
-.env.example
