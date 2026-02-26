@@ -483,16 +483,16 @@ function interpretationIcon(title: string) {
 
             <!-- ━━ 6. THEORY & INTERPRETATION ━━ -->
             <section v-if="interpretations.length > 0" id="interpretation" class="mt-12">
-              <div class="mb-6 flex items-start gap-3">
+              <!-- <div class="mb-6 flex items-start gap-3">
                 <div class="mt-1 h-8 w-1.5 rounded-full bg-brand" />
                 <div>
                   <h2 class="text-xl font-black tracking-tight text-gray-900">What It Really Means</h2>
                   <p class="mt-0.5 text-xs text-gray-400">Deeper analysis and interpretations</p>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Tabs -->
-              <div class="mb-5 flex gap-2">
+              <!-- <div class="mb-5 flex gap-2">
                 <button
                   @click="activeInterpretation = 'ai'"
                   class="rounded-full px-4 py-1.5 text-xs font-semibold transition-all"
@@ -507,9 +507,9 @@ function interpretationIcon(title: string) {
                 >
                   💬 Community Theories
                 </button>
-              </div>
+              </div> -->
 
-              <div v-if="activeInterpretation === 'ai'" class="space-y-4">
+              <!-- <div v-if="activeInterpretation === 'ai'" class="space-y-4">
                 <div
                   v-for="(interp, idx) in interpretations"
                   :key="interp.title"
@@ -533,7 +533,7 @@ function interpretationIcon(title: string) {
                 <span class="text-4xl">💬</span>
                 <p class="mt-3 text-sm font-medium text-gray-400">Community theories coming soon</p>
                 <p class="mt-1 text-xs text-gray-300">User-submitted theories and discussions will appear here</p>
-              </div>
+              </div> -->
             </section>
 
             <!-- ━━ 7. RATINGS & REACTIONS ━━ -->
