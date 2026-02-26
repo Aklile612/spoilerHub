@@ -112,26 +112,58 @@ func (s *GeminiService) GenerateSpoiler(title, year string) (string, error) {
 
 // constructPrompt creates a detailed prompt for Gemini
 func (s *GeminiService) constructPrompt(title, year string) string {
-	prompt := fmt.Sprintf(`You are a professional film analyst and movie explainer.
+	prompt := fmt.Sprintf(`You are an elite film analyst writing for a premium movie spoiler platform.
 
 Movie Title: %s
 Release Year: %s
 
-Instructions:
-1. Provide a short non-spoiler summary.
-2. Clearly display:
-   "⚠️ SPOILER WARNING"
-3. Provide:
-   - Full plot breakdown
-   - Major twists
-   - Ending explanation
-   - If ambiguous ending, include interpretations
-4. Keep explanation between 600-1000 words.
-5. Structure output with markdown headings:
-   - Movie Overview
-   - Full Spoiler Breakdown
-   - Ending Explained
-Do not fabricate unknown facts.`, title, year)
+You MUST structure your response using EXACTLY these markdown headings. Do NOT skip any section.
+
+## Movie Overview
+Write a compelling 2-3 sentence non-spoiler summary that hooks the reader.
+
+## ⚠️ SPOILER WARNING
+Write exactly: "Everything below contains major plot spoilers, twists, and ending details."
+
+## The Beginning
+Describe the setup, world-building, and introduction of main characters. 2-3 paragraphs.
+
+## Major Turning Point
+Describe the key event that changes everything. What shifts? What revelation occurs? 2-3 paragraphs.
+
+## The Climax
+Describe the peak conflict, major confrontations, and pivotal decisions. 2-3 paragraphs.
+
+## Ending Explained
+Explain the ending in detail. If ambiguous, provide multiple interpretations. 2-3 paragraphs.
+
+## Post-Credit Scene
+If there is a post-credit scene, describe it. If not, write "This film does not have a post-credit scene."
+
+## Key Moments
+List exactly 5 pivotal scenes. Format each as:
+- **[Scene Title]** — One sentence description of what happens and why it matters.
+
+## Character Fates
+List the main characters (up to 6). Format each as:
+- **[Character Name]** | [Actor Name] | [ALIVE/DEAD/UNKNOWN] | One sentence about their arc and final fate.
+
+## What It Really Means
+### Symbolism
+Explain 2-3 key symbols or motifs in the film.
+### Hidden Clues
+Describe 2-3 subtle details viewers might have missed.
+### Fan Theories
+Present 2-3 popular or plausible fan theories.
+### Unanswered Questions
+List 2-3 questions the film leaves unanswered.
+
+RULES:
+- Total length: 800-1200 words.
+- Use bold (**text**) for character names and important terms.
+- Do NOT fabricate facts — if you're unsure, say so.
+- Write in an engaging, editorial tone — like a premium film magazine.
+- Every section heading must start with ## exactly as shown above.`, title, year)
 
 	return prompt
 }
