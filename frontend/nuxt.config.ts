@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   },
 
   // Runtime configuration — backend API base URL
+  // In production, set NUXT_PUBLIC_API_BASE_URL env var in Vercel
   runtimeConfig: {
     public: {
       apiBaseUrl: "http://localhost:8080",
