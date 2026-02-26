@@ -29,15 +29,15 @@ const heroMovies: HeroMovie[] = [
     genres: ["Sci-Fi", "Adventure"],
   },
   {
-    title: "Marty Supreme",
+    title: "Blade Runner 2049",
     overview:
-      "Marty Mauser, a young man with a dream no one respects, goes to hell and back in pursuit of greatness. Set in the gritty underworld of competitive table tennis, Timothée Chalamet delivers a career-defining performance as a hustler who risks everything to prove himself on the biggest stage.",
-    rating: 7.6,
-    backdrop: "https://image.tmdb.org/t/p/original/qKWDHofjMHPSEOTLaixkC9ZmjTT.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/lYWEXbQgRTR4ZQleSXAgRbxAjvq.jpg",
-    year: "2025",
-    runtime: "2h 18m",
-    genres: ["Drama"],
+      "Thirty years after the events of the first film, a new blade runner, LAPD Officer K, unearths a long-buried secret that has the potential to plunge what's left of society into chaos. K's discovery leads him on a quest to find Rick Deckard, a former LAPD blade runner who has been missing for thirty years.",
+    rating: 8.0,
+    backdrop: "https://image.tmdb.org/t/p/original/sAtoMqDVhNDQBc3QJL3RF6hlhGq.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
+    year: "2017",
+    runtime: "2h 44m",
+    genres: ["Sci-Fi", "Drama"],
   },
   {
     title: "Whiplash",
@@ -51,15 +51,15 @@ const heroMovies: HeroMovie[] = [
     genres: ["Drama", "Music"],
   },
   {
-    title: "Sinners",
+    title: "Interstellar",
     overview:
-      "Trying to leave their troubled lives behind, twin brothers return to their hometown to start again, only to discover that an even greater evil is waiting to welcome them back. Ryan Coogler reunites with Michael B. Jordan in this visceral supernatural thriller set in the Deep South.",
-    rating: 7.5,
-    backdrop: "https://image.tmdb.org/t/p/original/nAxGnGHOsfzufThz20zgmRwKur3.jpg",
-    poster: "https://image.tmdb.org/t/p/w500/qTvFWCGeGXgBRaINLY1zqgTPSpn.jpg",
-    year: "2025",
-    runtime: "2h 17m",
-    genres: ["Horror", "Action", "Thriller"],
+      "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot is tasked with piloting a spacecraft along with a team of researchers to find a new planet for humans. Traveling through a wormhole near Saturn, they venture into the unknown while confronting the limits of human endurance and the boundless nature of love.",
+    rating: 8.7,
+    backdrop: "https://image.tmdb.org/t/p/original/pbrkL804c8yAv3zBZR4QPEafpAR.jpg",
+    poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    year: "2014",
+    runtime: "2h 49m",
+    genres: ["Sci-Fi", "Adventure", "Drama"],
   },
 ];
 
@@ -123,7 +123,7 @@ function formatRating(rating: number): string {
     </div>
 
     <!-- Gradient overlays -->
-    <div class="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/50 to-black/30" />
+    <div class="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/10 to-black/30" />
     <div class="absolute inset-0 z-20 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
 
     <!-- Content: poster + info -->
