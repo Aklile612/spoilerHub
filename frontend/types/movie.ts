@@ -13,6 +13,35 @@ export interface Movie {
   genres: string[];
   overview: string;
   spoiler?: string; // Only present when fetched with spoiler
+  runtime?: number; // Runtime in minutes (from TMDB detail endpoint)
+}
+
+/** Parsed character fate from Gemini spoiler text */
+export interface CharacterFate {
+  name: string;
+  actor: string;
+  status: "ALIVE" | "DEAD" | "UNKNOWN";
+  summary: string;
+}
+
+/** Parsed key moment from Gemini spoiler text */
+export interface KeyMoment {
+  title: string;
+  description: string;
+}
+
+/** Parsed story section from Gemini spoiler text */
+export interface StorySection {
+  id: string;
+  title: string;
+  icon: string;
+  content: string;
+}
+
+/** Parsed interpretation section */
+export interface InterpretationSection {
+  title: string;
+  content: string;
 }
 
 /** Response shape from /api/movies and /api/search */
