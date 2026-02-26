@@ -52,7 +52,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/svg+xml",
-          href: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🍿</text></svg>",
+          href: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111'/%3E%3Crect x='4' y='4' width='92' height='92' rx='16' fill='none' stroke='%23F5C518' stroke-width='6'/%3E%3Ctext x='50' y='66' font-family='Inter,system-ui,sans-serif' font-size='48' font-weight='900' font-style='italic' fill='%23F5C518' text-anchor='middle'%3ESP%3C/text%3E%3C/svg%3E",
         },
       ],
     },
