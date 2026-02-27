@@ -81,7 +81,7 @@ func (h *MovieHandler) GetMovie(c *gin.Context) {
 	genres := h.tmdbService.ExtractGenreNames(tmdbMovie.GenreIDs, genreMap)
 
 	// Step 2: Generate spoiler explanation using Gemini (only on cache miss)
-	spoiler, err := h.geminiService.GenerateSpoiler(tmdbMovie.Title, year)
+	spoiler, err := h.geminiService.GenerateSpoiler(tmdbMovie.Title, year, tmdbMovie.Overview)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
 			Error: fmt.Sprintf("failed to generate spoiler explanation: %v", err),

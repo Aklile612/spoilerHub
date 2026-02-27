@@ -29,7 +29,7 @@ func NewGeminiService(apiKey string) *GeminiService {
 }
 
 // GenerateSpoiler generates a detailed spoiler explanation for a movie
-func (s *GeminiService) GenerateSpoiler(title, year string) (string, error) {
+func (s *GeminiService) GenerateSpoiler(title, year, overview string) (string, error) {
 	// Check cache first
 	cacheKey := fmt.Sprintf("%s_%s", title, year)
 	
@@ -41,7 +41,7 @@ func (s *GeminiService) GenerateSpoiler(title, year string) (string, error) {
 	s.mu.RUnlock()
 
 	// Construct the prompt
-	prompt := s.constructPrompt(title, year)
+	prompt := s.constructPrompt(title, year, overview)
 
 	// Create Gemini API request
 	request := models.GeminiRequest{
@@ -111,11 +111,12 @@ func (s *GeminiService) GenerateSpoiler(title, year string) (string, error) {
 }
 
 // constructPrompt creates a detailed prompt for Gemini
-func (s *GeminiService) constructPrompt(title, year string) string {
+func (s *GeminiService) constructPrompt(title, year, overview string) string {
 	prompt := fmt.Sprintf(`You are an elite film analyst writing for a premium movie spoiler platform.
 
 Movie Title: %s
 Release Year: %s
+Movie Overview: %s
 
 You MUST structure your response using EXACTLY these markdown headings. Do NOT skip any section.
 
@@ -162,8 +163,9 @@ RULES:
 - Total length: 800-1200 words.
 - Use bold (**text**) for character names and important terms.
 - Do NOT fabricate facts — if you're unsure, say so.
+- If you do not have spoiler information for this specific movie, respond with ONLY: "## Movie Not Found\nWe don't have spoiler information for this movie yet." Do NOT substitute another film's spoiler.
 - Write in an engaging, editorial tone — like a premium film magazine.
-- Every section heading must start with ## exactly as shown above.`, title, year)
+- Every section heading must start with ## exactly as shown above.`, title, year, overview)
 
 	return prompt
 }
