@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Discover detailed AI-generated spoiler explanations for your favorite movies",
+            "Discover detailed spoiler explanations for your favorite movies",
         },
         { name: "theme-color", content: "#ffffff" },
       ],
