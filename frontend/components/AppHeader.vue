@@ -46,9 +46,6 @@
           </span>
         </div>
       </NuxtLink>
-
-      <!-- Search bar -->
-      <SearchBar />
     </div>
   </header>
 </template>

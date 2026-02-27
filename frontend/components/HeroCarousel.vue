@@ -127,8 +127,15 @@ function formatRating(rating: number): string {
     <div class="absolute inset-0 z-20 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
 
     <!-- Content: poster + info -->
-    <div class="absolute inset-0 z-30 flex items-end pb-20 sm:items-center sm:pb-0">
-      <div class="mx-auto flex w-full max-w-7xl items-end gap-6 px-6 sm:items-center sm:gap-10 lg:px-16">
+    <div class="absolute inset-0 z-30 flex flex-col">
+      <!-- Search bar at top -->
+      <div class="flex items-center justify-center px-6 pt-20 lg:px-16">
+        <SearchBar />
+      </div>
+
+      <!-- Movie info area -->
+      <div class="flex flex-1 items-end pb-20 sm:items-center sm:pb-0">
+        <div class="mx-auto flex w-full max-w-7xl items-end gap-6 px-6 sm:items-center sm:gap-10 lg:px-16">
 
         <!-- Poster card -->
         <div class="hidden shrink-0 sm:block">
@@ -202,6 +209,7 @@ function formatRating(rating: number): string {
             </NuxtLink>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
