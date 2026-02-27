@@ -29,7 +29,7 @@ useHead({
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="pt-20 mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <!-- Search header -->
     <div class="mb-8">
       <h1 class="text-2xl font-bold text-gray-900">
