@@ -7,7 +7,7 @@ import type { TrendingResponse } from "~/types/movie";
 
 // Fetch trending movies with pagination
 const { movies, loading, loadingMore, error, hasMore, loadMore } =
-  useMovies("2025,2026");
+  useMovies("2024,2025");
 
 // Fetch trending (cached) movies from Supabase
 const config = useRuntimeConfig();
@@ -59,6 +59,17 @@ useHead({
   title: "SpoilerHub — Discover Movie Spoilers",
 });
 
+// Horizontal scroll for dominating section
+const dominatingScroll = ref<HTMLElement | null>(null);
+function scrollDominating(direction: 'left' | 'right') {
+  if (!dominatingScroll.value) return;
+  const amount = dominatingScroll.value.clientWidth * 0.75;
+  dominatingScroll.value.scrollBy({
+    left: direction === 'left' ? -amount : amount,
+    behavior: 'smooth',
+  });
+}
+
 // Genre filter for trending section
 const genreFilters = ["All", "Action", "Drama", "Horror", "Comedy", "Thriller"];
 const activeGenre = ref("All");
@@ -93,13 +104,33 @@ const filteredMovies = computed(() => {
               <span class="inline-block h-1.5 w-8 rounded-full bg-brand" />
             </h2>
           </div>
-          <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand-dark">
-            {{ trendingMovies.length }} movies
-          </span>
+          <div class="flex items-center gap-3">
+            <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand-dark">
+              {{ trendingMovies.length }} movies
+            </span>
+            <button
+              @click="scrollDominating('left')"
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 shadow-sm transition-all hover:bg-gray-900 hover:text-white hover:shadow-md active:scale-95"
+              aria-label="Scroll left"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              @click="scrollDominating('right')"
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 shadow-sm transition-all hover:bg-gray-900 hover:text-white hover:shadow-md active:scale-95"
+              aria-label="Scroll right"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Horizontal scroll — cinematic wide cards -->
-        <div class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
+        <div ref="dominatingScroll" class="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
           <NuxtLink
             v-for="(movie, index) in trendingMovies"
             :key="movie.title + movie.year"
@@ -191,7 +222,7 @@ const filteredMovies = computed(() => {
               Trending Movies
             </h2>
             <p class="mt-0.5 text-sm text-brand-dark">
-              Top rated movies for 2025–2026 season
+              Top rated movies for 2024–2025 season
             </p>
           </div>
         </div>

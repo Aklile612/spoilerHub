@@ -68,6 +68,17 @@ function toggleSection(id: string) {
   }
 }
 
+// ── Key moments horizontal scroll ──
+const keyMomentsScroll = ref<HTMLElement | null>(null);
+function scrollKeyMoments(direction: 'left' | 'right') {
+  if (!keyMomentsScroll.value) return;
+  const amount = keyMomentsScroll.value.clientWidth * 0.75;
+  keyMomentsScroll.value.scrollBy({
+    left: direction === 'left' ? -amount : amount,
+    behavior: 'smooth',
+  });
+}
+
 // ── Interpretation tab ──
 const activeInterpretation = ref("ai");
 
@@ -266,7 +277,7 @@ function interpretationIcon(title: string) {
 
         <!-- Poster + Info -->
         <div class="relative z-10 mx-auto max-w-5xl px-4 pb-8 pt-6 sm:px-6 sm:pt-10 lg:px-8">
-          <div class="flex flex-col gap-5 sm:flex-row sm:items-end">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div class="shrink-0">
               <img
                 :src="movie.poster || posterFallback"
@@ -274,7 +285,7 @@ function interpretationIcon(title: string) {
                 class="h-auto w-36 rounded-2xl shadow-2xl ring-4 ring-white/10 sm:w-44"
               />
             </div>
-            <div class="flex-1 pb-1">
+            <div class="flex-1">
               <h1 class="text-2xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
                 {{ movie.title }}
               </h1>
@@ -297,8 +308,8 @@ function interpretationIcon(title: string) {
                   {{ genre }}
                 </span>
               </div>
-              <p class="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">
-                {{ movie.overview || "No overview available." }}
+              <p v-if="movie.overview" class="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 line-clamp-2">
+                {{ movie.overview }}
               </p>
             </div>
           </div>
@@ -454,14 +465,36 @@ function interpretationIcon(title: string) {
 
             <!-- ━━ 5. KEY MOMENTS ━━ -->
             <section v-if="keyMoments.length > 0" id="key-moments" class="mt-12">
-              <div class="mb-6 flex items-start gap-3">
-                <div class="mt-1 h-8 w-1.5 rounded-full bg-brand" />
-                <div>
-                  <h2 class="text-xl font-black tracking-tight text-gray-900">Key Moments</h2>
-                  <p class="mt-0.5 text-xs text-gray-400">Pivotal scenes that define the film</p>
+              <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 h-8 w-1.5 rounded-full bg-brand" />
+                  <div>
+                    <h2 class="text-xl font-black tracking-tight text-gray-900">Key Moments</h2>
+                    <p class="mt-0.5 text-xs text-gray-400">Pivotal scenes that define the film</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    @click="scrollKeyMoments('left')"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 shadow-sm transition-all hover:bg-gray-900 hover:text-white hover:shadow-md active:scale-95"
+                    aria-label="Scroll left"
+                  >
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    @click="scrollKeyMoments('right')"
+                    class="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 shadow-sm transition-all hover:bg-gray-900 hover:text-white hover:shadow-md active:scale-95"
+                    aria-label="Scroll right"
+                  >
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
               </div>
-              <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              <div ref="keyMomentsScroll" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
                 <div
                   v-for="(moment, idx) in keyMoments"
                   :key="idx"
