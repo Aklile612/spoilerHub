@@ -23,7 +23,10 @@
           Go
         </p>
         <p class="mt-1 text-xs text-gray-300">
-          Movie data from TMDB · Spoilers by Gemini AI
+          Movie data from TMDB · 
+        </p>
+        <p class="mt-1 text-sm text-gray-300">
+          Created by <a href="https://aklileansa.vercel.app/" class="text-gray-400 hover:text-gray-500">Aklile Ansa</a>
         </p>
       </div>
     </footer>

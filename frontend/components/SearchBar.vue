@@ -32,7 +32,7 @@ function handleInput() {
 <template>
   <form
     @submit.prevent="handleSubmit"
-    class="relative flex w-full max-w-md items-center"
+    class="relative flex w-full max-w-xl items-center"
     role="search"
   >
     <!-- Search icon -->
