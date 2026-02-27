@@ -58,12 +58,14 @@ function revealSpoilers() {
 // ── Accordion state ──
 const openSections = ref<Set<string>>(new Set());
 function toggleSection(id: string) {
+  // If clicking the already open section, close it
   if (openSections.value.has(id)) {
     openSections.value.delete(id);
+    openSections.value = new Set(openSections.value);
   } else {
-    openSections.value.add(id);
+    // Otherwise, close all others and open this one
+    openSections.value = new Set([id]);
   }
-  openSections.value = new Set(openSections.value);
 }
 
 // ── Interpretation tab ──
