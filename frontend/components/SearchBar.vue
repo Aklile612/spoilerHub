@@ -37,7 +37,7 @@ function handleInput() {
   >
     <!-- Search icon -->
     <svg
-      class="pointer-events-none absolute left-3 h-4 w-4 text-white/40"
+      class="pointer-events-none absolute left-3.5 h-4 w-4 text-gray-400"
       fill="none"
       stroke="currentColor"
       stroke-width="2"
@@ -57,7 +57,7 @@ function handleInput() {
       type="search"
       placeholder="Search movies…"
       aria-label="Search movies"
-      class="w-full rounded-full border border-white/15 bg-white/10 py-1.5 pl-9 pr-4 text-sm text-white placeholder-white/40 transition-colors focus:border-brand/50 focus:bg-white/15 focus:outline-none focus:ring-1 focus:ring-brand/50"
+      class="w-full rounded-full border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
     />
   </form>
 </template>
