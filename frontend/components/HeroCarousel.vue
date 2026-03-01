@@ -107,7 +107,7 @@ function formatRating(rating: number): string {
 
 <template>
   <section class="relative h-[85vh] min-h-[550px] w-full overflow-hidden bg-black">
-    <!-- Backdrop images -->
+    
     <div
       v-for="(movie, index) in heroMovies"
       :key="movie.title"
